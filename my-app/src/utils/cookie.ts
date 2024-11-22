@@ -1,9 +1,8 @@
-import { serialize } from 'cookie'
-import { NextApiResponse } from 'next'
+import { NextResponse } from 'next/server'
 import { CookieArgs, CookiesMiddleware } from '../types'
 
 const cookieFn = (
-  res: NextApiResponse,
+  res: NextResponse | { cookie: (args: CookieArgs) => void },
   { name, value, options = {} }: CookieArgs
 ) => {
   const stringValue =
@@ -15,12 +14,13 @@ const cookieFn = (
   }
 
   // устанавливаем заголовок `Set-Cookie`
-  res.setHeader('Set-Cookie', serialize(name, String(stringValue), options))
+  const response = NextResponse.next()
+  response.cookies.set(name, String(stringValue), options)
 }
 
 const cookies: CookiesMiddleware = (handler) => (req, res) => {
   // расширяем объект ответа
-  res.cookie = (args: CookieArgs) => cookieFn(res, args)
+  res.cookie = (args) => cookieFn(res, args)
 
   // передаем управление следующему обработчику
   return handler(req, res)

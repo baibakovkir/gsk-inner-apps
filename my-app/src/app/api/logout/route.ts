@@ -16,7 +16,7 @@ const logoutHandler: NextApiHandlerWithCookie = async (req, res) => {
     }
   })
 
-  res.status(200).json({ message: 'Logout success' })
+  return new Response(null, { status: 204 })
 }
 
 // обратите внимание, что этот роут является защищенным

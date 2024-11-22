@@ -1,5 +1,6 @@
 import { SerializeOptions } from 'cookie'
 import { NextApiRequest, NextApiResponse } from 'next'
+import { NextResponse, NextRequest } from 'next/server'
 
 export type CookieArgs = {
   name: string
@@ -8,18 +9,18 @@ export type CookieArgs = {
   options?: SerializeOptions
 }
 
-export type NextApiResponseWithCookie = NextApiResponse & {
+export type NextApiResponseWithCookie = NextResponse & {
   cookie: (args: CookieArgs) => void
 }
 
 export type NextApiHandlerWithCookie = (
-  req: NextApiRequest,
+  req: NextRequest,
   res: NextApiResponseWithCookie
 ) => unknown | Promise<unknown>
 
 export type CookiesMiddleware = (
   handler: NextApiHandlerWithCookie
-) => (req: NextApiRequest, res: NextApiResponseWithCookie) => void
+) => (req: NextRequest, res: NextApiResponseWithCookie) => void
 
 export type NextApiRequestWithUserId = NextApiRequest & {
   userId: string

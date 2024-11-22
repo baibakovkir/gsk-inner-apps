@@ -7,16 +7,20 @@ import argon2 from 'argon2'
 import jwt from 'jsonwebtoken'
 
 const registerHandler: NextApiHandlerWithCookie = async (req, res) => {
-  console.log(req);
   // извлекаем данные из тела запроса
   // одним из преимуществ использования Prisma является автоматическая генерация типов моделей
-  const data: Pick<User, 'username' | 'email' | 'password'> = JSON.parse(
-    req.body
+  const data: Pick<User, 'username' | 'email' | 'password'> = (
+    await req.json()
   )
+
+  console.log(data)
 
   // если отсутствует хотя бы одно обязательное поле
   if (!checkFields(data, ['email', 'password'])) {
-    return res.status(400).json({ message: 'Some required fields are missing' })
+    return new Response(
+      JSON.stringify({ message: 'Some required fields are missing' }),
+      { status: 400 }
+    )
   }
 
   try {
@@ -27,7 +31,10 @@ const registerHandler: NextApiHandlerWithCookie = async (req, res) => {
 
     // если данные имеются, значит, пользователь уже зарегистрирован
     if (existingUser) {
-      return res.status(409).json({ message: 'Email already in use' })
+      return new Response(
+        JSON.stringify({ message: 'User already exists' }),
+        { status: 409 }
+      )
     }
 
     // хэшируем пароль
@@ -89,15 +96,18 @@ const registerHandler: NextApiHandlerWithCookie = async (req, res) => {
     })
 
     // возвращаем данные пользователя и токен доступа
-    res.status(200).json({
-      user: newUser,
-      accessToken
-    })
+    return new Response(
+      JSON.stringify({ user: newUser, accessToken }),
+      { status: 201 }
+    )
   } catch (e) {
     console.log(e)
-    res.status(500).json({ message: 'User register error' })
+    return new Response(
+      JSON.stringify({ message: 'Something went wrong' }),
+      { status: 500 }
+    )
   }
   
 }
 
-export default cookies(registerHandler)
+export default cookies(registerHandler);
