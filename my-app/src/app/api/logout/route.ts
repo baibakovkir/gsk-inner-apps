@@ -1,24 +1,21 @@
-import { NextApiHandlerWithCookie } from '@/types'
-import authGuard from '@/utils/authGuard'
-import cookies from '@/utils/cookie'
+import { NextResponse } from "next/server"
 
-const logoutHandler: NextApiHandlerWithCookie = async (req, res) => {
-  // для реализации выхода пользователя из системы достаточно удалить куки
-  res.cookie({
-    name: process.env.COOKIE_NAME!,
-    value: '',
-    options: {
-      httpOnly: true,
-      maxAge: 0,
-      path: '/',
-      sameSite: true,
-      secure: true
-    }
-  })
 
-  return new Response(null, { status: 204 })
+export async function GET(): Promise<NextResponse> {
+  // извлекаем токен идентификации из куки
+  
+  try {
+    return new NextResponse(
+      JSON.stringify({ message: 'You have been logged out' }),
+      { status: 201,
+        headers: { 'Set-Cookie': `${process.env.COOKIE_NAME}='', HttpOnly, Max-Age=604800, Path=/, SameSite=Strict, Secure` }
+      }
+    )
+  } catch (e) {
+    console.log(e)
+    return new NextResponse(
+      JSON.stringify({ message: 'Something went wrong' }),
+      { status: 500 }
+    )
+  }
 }
-
-// обратите внимание, что этот роут является защищенным
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default authGuard(cookies(logoutHandler) as any)
