@@ -32,7 +32,6 @@ model Post {
   likes     Like[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  // уникальное сочетание полей, используемое для обновления и удаления записи
   @@unique([id, authorId])
 }
 
@@ -42,6 +41,5 @@ model Like {
   userId String
   post   Post   @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   postId String
-
   @@unique([id, userId, postId])
 }

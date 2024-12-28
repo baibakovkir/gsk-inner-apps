@@ -1,10 +1,17 @@
-import { Box, Typography } from "@mui/material";
+import { Divider } from '@mui/material'
+import LogoutButton from './Buttons/Logout'
+import UploadForm from './Forms/Upload'
 
-export default function UserPanel() {
-  return (
-    <Box>
-      <Typography>Панель пользователя</Typography>
-    </Box>
-  )
+type Props = {
+  closeModal?: () => void
 }
 
+export default function UserPanel({ closeModal }: Props) {
+  return (
+    <>
+      <UploadForm closeModal={closeModal} />
+      <Divider />
+      <LogoutButton closeModal={closeModal} />
+    </>
+  )
+}

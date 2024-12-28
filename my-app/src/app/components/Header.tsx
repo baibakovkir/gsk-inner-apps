@@ -7,9 +7,9 @@ export type PageLinks = { title: string; href: string }[]
 // наше приложение состоит из 3 страниц:
 // Главной, Блога и Контактов
 const PAGE_LINKS = [
-  { title: 'Home', href: '/' },
-  { title: 'Posts', href: '/posts' },
-  { title: 'About', href: '/about' }
+  { title: 'Главная', href: '/' },
+  { title: 'Новости', href: '/posts' },
+  { title: 'О программе', href: '/about' }
 ]
 
 export default function Header() {
