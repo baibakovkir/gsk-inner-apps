@@ -17,62 +17,49 @@ export default function UploadForm({ closeModal }: Props) {
   if (!user) return null
 
   // обработчик отправки формы
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
-    if (!file) return
-
-    e.preventDefault()
-
-    const formData = new FormData()
-
-    // создаем экземпляр `File`, названием которого является id пользователя + расширение файла
-    const _file = new File([file], `${user.id}.${file.type.split('/')[1]}`, {
-      type: file.type
-    })
-    formData.append('avatar', _file)
-
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!file) return; // Ensure there's a file to upload
+  
+    const formData = new FormData();
+    formData.append('avatar', file); // Append the file directly
+  
     try {
-      // отправляем файл на сервер
       const res = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
         headers: {
-          // роут для загрузки аватара является защищенным
-          Authorization: `Bearer ${accessToken}`
-        }
-      })
-
+          Authorization: `Bearer ${accessToken}`, // Include the token
+        },
+      });
+  
       if (!res.ok) {
-        throw res
+        throw new Error(`HTTP error! status: ${res.status}`);
       }
-
-      // извлекаем обновленные данные пользователя
-      const user = await res.json()
-      // инвалидируем кэш
-      mutate({ user })
-
-      // закрываем модалку
+  
+      const updatedUser = await res.json();
+      mutate({ user: updatedUser }); // Update cache with new user data
+  
       if (closeModal) {
-        closeModal()
+        closeModal(); // Close modal if applicable
       }
-    } catch (e) {
-      console.error(e)
+    } catch (error) {
+      console.error(error);
     }
-  }
+  };
 
   // обработчик изменения состояния инпута для загрузки файла
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    if (e.target.files && previewRef.current) {
-      // извлекаем файл
-      const _file = e.target.files[0]
-      // обновляем состояние
-      setFile(_file)
-      // получаем ссылку на элемент `img`
-      const img = previewRef.current.children[0] as HTMLImageElement
-      // формируем и устанавливаем источник изображения
-      img.src = URL.createObjectURL(_file)
-      img.onload = () => {
-        // очищаем память
-        URL.revokeObjectURL(img.src)
+    if (e.target.files) {
+      const _file = e.target.files[0];
+      setFile(_file);
+      
+      if (previewRef.current && previewRef.current.children.length > 0) {
+        const img = previewRef.current.children[0] as HTMLImageElement;
+        img.src = URL.createObjectURL(_file);
+        img.onload = () => {
+          URL.revokeObjectURL(img.src);
+        };
       }
     }
   }
@@ -92,7 +79,7 @@ export default function UploadForm({ closeModal }: Props) {
         <label htmlFor='avatar'>
           <Button component='span'>Choose file</Button>
         </label>
-        <Avatar alt='preview' ref={previewRef} src='/img/user.png' />
+        <Avatar alt='preview' ref={previewRef} src='/public/gsk.png' />
         <Button
           type='submit'
           variant='contained'
