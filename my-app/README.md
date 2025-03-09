@@ -19,3 +19,11 @@ swr - хуки React для запроса (получения - fetching) да�
 @types/... - недостающие типы TS;
 babel-plugin-import - плагин Babel для эффективной "тряски дерева" (tree shaking) при импорте компонентов MUI по названию;
 sass - препроцессор CSS.
+
+
+## dev
+
+cp .env.example .env
+npm install
+npx prisma migrate dev --name initial_migration
+npm run dev

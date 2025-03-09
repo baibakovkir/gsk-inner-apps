@@ -1,6 +1,7 @@
 'use client'
 import Header from '@/app/components/Header'
 import Footer from './components/Footer'
+import 'normalize.css'
 
 
 export default function RootLayout({

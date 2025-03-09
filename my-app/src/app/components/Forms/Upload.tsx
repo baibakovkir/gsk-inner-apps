@@ -23,7 +23,7 @@ export default function UploadForm({ closeModal }: Props) {
   
     const formData = new FormData();
     formData.append('avatar', file); // Append the file directly
-  
+    await console.log(formData)
     try {
       const res = await fetch('/api/upload', {
         method: 'POST',
@@ -48,7 +48,6 @@ export default function UploadForm({ closeModal }: Props) {
     }
   };
 
-  // обработчик изменения состояния инпута для загрузки файла
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     if (e.target.files) {
       const _file = e.target.files[0];
@@ -79,7 +78,7 @@ export default function UploadForm({ closeModal }: Props) {
         <label htmlFor='avatar'>
           <Button component='span'>Choose file</Button>
         </label>
-        <Avatar alt='preview' ref={previewRef} src='/public/gsk.png' />
+        <Avatar alt='preview' ref={previewRef} src={previewRef ? previewRef.current?.src : ''} />
         <Button
           type='submit'
           variant='contained'

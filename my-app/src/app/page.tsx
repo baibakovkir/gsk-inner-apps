@@ -29,7 +29,7 @@ const programms = {
 export default function Home() {
   return (
     <main>
-      <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', flexWrap: 'wrap', minHeight: 'calc(100vh - 104px)' }}>
+      <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', flexWrap: 'wrap', minHeight: 'calc(100vh - 130px)' }}>
         {Object.values(programms).map((programm) => (
           
             <Box key={programm.id} sx={{ height: '300px', minWidth: '300px', border: 2 }}>

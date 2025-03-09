@@ -20,7 +20,7 @@ export default function ProfileButton() {
         <ListItemButton sx={{ borderRadius: '50%', px: theme.spacing(1) }}>
           <Avatar
             // источником аватара является либо файл, загруженный пользователей, либо дефолтное изображение
-            src={user && user.avatarUrl ? user.avatarUrl : '/gsk.png'}
+            src={user && user.avatarUrl ? user.avatarUrl : '/logo.svg'}
           />
         </ListItemButton>
       }

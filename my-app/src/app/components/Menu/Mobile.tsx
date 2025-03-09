@@ -6,6 +6,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@mui/material'
 import type { PageLinks } from '../Header'
+import ProfileButton from '../Buttons/ProfileButton'
 
 type Props = {
   links: PageLinks
@@ -60,7 +61,7 @@ export default function MobileMenu({ links }: Props) {
           ))}
         </List>
       </Drawer>
-      <Button />
+      <ProfileButton />
     </Box>
   )
 }
